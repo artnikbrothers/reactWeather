@@ -34,6 +34,7 @@ const Weather = React.createClass({
     }
     return (
       <div>
+        <h2>Weather Component</h2>
         <WeatherForm onGetWeather={this.handleGetWeather} />
         {renderMessage()}
       </div>
