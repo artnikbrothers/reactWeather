@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "standard": {
-    "globals": [ "$", "jQuery" ]
+    "globals": [ "$", "jQuery", "Foundation" ]
   },
   "dependencies": {
     "axios": "^0.15.3",

@@ -2,6 +2,7 @@ import React from 'react'
 import WeatherForm from 'WeatherForm'
 import WeatherMessage from 'WeatherMessage'
 import openWeatherMap from 'openWeatherMap'
+import ErrorModal from 'ErrorModal'
 
 const Weather = React.createClass({
   getInitialState: function () {
@@ -10,7 +11,10 @@ const Weather = React.createClass({
     }
   },
   handleGetWeather: function (location) {
-    this.setState({isLoading: true})
+    this.setState({
+      isLoading: true,
+      errorMessage: undefined
+    })
 
     openWeatherMap.getTemp(location).then((temp) => {
       this.setState({
@@ -18,13 +22,24 @@ const Weather = React.createClass({
         temp: temp,
         isLoading: false
       })
-    }, (errorMessage) => {
-      this.setState({isLoading: false})
-      window.alert(errorMessage)
+    }, (e) => {
+      this.setState({
+        isLoading: false,
+        errorMessage: e.message
+      })
     })
   },
   render: function () {
-    var {isLoading, location, temp} = this.state
+    var {isLoading, location, temp, errorMessage} = this.state
+
+    function renderError () {
+      if (typeof errorMessage === 'string') {
+        return (
+          <ErrorModal message={errorMessage} />
+        )
+      }
+    }
+
     function renderMessage () {
       if (isLoading) {
         return <h3 className='text-center'>Loading...</h3>
@@ -37,6 +52,7 @@ const Weather = React.createClass({
         <h1 className='text-center'>Get Weather</h1>
         <WeatherForm onGetWeather={this.handleGetWeather} />
         {renderMessage()}
+        {renderError()}
       </div>
     )
   }
